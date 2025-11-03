@@ -3,6 +3,15 @@ import sounddevice as sd
 import soundfile as sf
 from faster_whisper import WhisperModel
 
+def transcribe_audio(model, audio_file):
+    """
+    Transcribes the given audio file.
+    """
+    segments, _ = model.transcribe(audio_file)
+    transcription = " ".join([segment.text for segment in segments])
+    print(f"Transcription: {transcription}")
+    return transcription.strip()
+
 def record_and_transcribe(model, output_file="recording.wav", samplerate=44100):
     """
     Simple push-to-talk recorder: record -> save -> transcribe -> return text
@@ -29,12 +38,7 @@ def record_and_transcribe(model, output_file="recording.wav", samplerate=44100):
     
     print("🎯 Transcribing...")
     
-    # Transcribe
-    segments, _ = model.transcribe(output_file)
-    transcription = " ".join([segment.text for segment in segments])
-    
-    print(f"Transcription: {transcription}")
-    return transcription.strip()
+    return transcribe_audio(model, output_file)
 
 
 # Example usage
